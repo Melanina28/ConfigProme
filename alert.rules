@@ -1,0 +1,36 @@
+groups:
+- name: custom rules
+  rules:
+  - alert: cpuUsge
+    expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{job= 'node_exporter',mode="idle"}[5m]))*100) > 95
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: machine under healvy load
+- name: alert_rules
+  rules:
+    - alert: InstanceDown
+      expr: up == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Instance  down "
+        description: "pos se te cayo.... levantalo xS"
+
+    - alert: Disk Space
+      expr: 100 - (node_filesystem_avail_bytes / node_filesystem_size_bytes * 100) <=10
+      labels:
+        severity: warning
+      annotations:
+        summary: "Instance [{{ $labels.instance }}] has 10% or less Free disk space"
+        description: "[{{ $labels.instance }}] has only {{ $value }}% or less free."
+
+    - alert: Memory Space
+      expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) > 95
+      labels:
+        severity: warning
+      annotations:
+        summary: "Instance [{{ $labels.instance }}] La memoria a su maxima capacidad"
+        description: "memoria exedida"

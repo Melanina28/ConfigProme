@@ -1,0 +1,13 @@
+
+route:
+  group_by: ['alertmanager']
+  receiver: smtp-local
+receivers:
+  - name: 'smtp-local'
+    email_configs:
+     - to: 'melanievillalobos016ags@gmail.com'
+       from: 'admin@prometheus.seanwasere.com'
+       require_tls: false
+       smarthost: localhost:25
+       send_resolved: true
+
